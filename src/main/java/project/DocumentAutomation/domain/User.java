@@ -3,6 +3,7 @@ package project.DocumentAutomation.domain;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,7 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @Builder
     public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
