@@ -2,19 +2,19 @@ package project.DocumentAutomation.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class DashboardController {
 
-    @GetMapping("/dashboard")
+    @GetMapping("/api/dashboard")
     public String dashboard(Authentication authentication) {
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            return "redirect:/admin/dashboard";
+            return "admin_dashboard";
         } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_UNIVERSITY"))) {
-            return "redirect:/university/dashboard";
+            return "university_dashboard";
         }
-        return "redirect:/login";
+        return "access_denied";
     }
 }

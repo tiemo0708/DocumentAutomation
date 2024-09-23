@@ -11,6 +11,9 @@ spring:
       hibernate:
         #          show_sql: true
         format_sql: true
+jwt:
+  secret: yourVeryLongAndSecureSecretKeyHerePleaseMakeItLongEnough
+  expiration: 86400000  # 24시간 (밀리초 단위)
 
 logging:
   level:
