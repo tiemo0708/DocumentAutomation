@@ -3,6 +3,7 @@ package project.DocumentAutomation.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.DocumentAutomation.Service.UserService;
 import project.DocumentAutomation.domain.User;
@@ -12,6 +13,7 @@ import project.DocumentAutomation.dto.CreateUniversityDto;
 @RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
+@Controller
 public class AdminController {
 
     private final UserService userService;
