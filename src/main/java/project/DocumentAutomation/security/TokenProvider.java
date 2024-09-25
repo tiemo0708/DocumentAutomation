@@ -4,15 +4,17 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import project.DocumentAutomation.dto.TokenDto;
+import project.DocumentAutomation.exception.InvalidTokenException;
 
 
 import java.security.Key;
@@ -34,9 +36,12 @@ public class TokenProvider {
 
     private final Key key;
 
-    public TokenProvider(@Value("${jwt.secret}") String secretKey) {
-        // 안전한 키 생성 방법 사용
+
+    private final ApplicationContext applicationContext;
+
+    public TokenProvider(@Value("${jwt.secret}") String secretKey, ApplicationContext applicationContext) {
         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        this.applicationContext = applicationContext;
     }
 
     public TokenDto generateTokenDto(Authentication authentication) {
@@ -55,6 +60,7 @@ public class TokenProvider {
                 .compact();
 
         String refreshToken = Jwts.builder()
+                .setSubject(authentication.getName())
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -106,5 +112,25 @@ public class TokenProvider {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+    public TokenDto refreshToken(String refreshToken) {
+        // 리프레시 토큰 검증
+        if (!validateToken(refreshToken)) {
+            throw new InvalidTokenException("Invalid refresh token");
+        }
+
+        // 토큰에서 사용자 정보 추출
+        Claims claims = parseClaims(refreshToken);
+        String username = claims.getSubject();
+
+        // 새 토큰 생성
+        UserDetails userDetails = getUserDetailsService().loadUserByUsername(username);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+
+        return generateTokenDto(authentication);
+    }
+    // UserDetailsService를 필요할 때 가져오는 메서드
+    private UserDetailsService getUserDetailsService() {
+        return applicationContext.getBean(UserDetailsService.class);
     }
 }
