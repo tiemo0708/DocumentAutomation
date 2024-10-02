@@ -12,6 +12,7 @@ public class DataInitializer implements CommandLineRunner {
 
     private final UserService userService;
 
+    //외부 노출 안되도록 수정할 것
     @Override
     public void run(String... args) {
         if (userService.findByUsername("admin").isEmpty()) {

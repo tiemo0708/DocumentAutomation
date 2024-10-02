@@ -10,11 +10,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class University {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Id
+    @Column(name = "university_name")
     private String universityName;
 
     @Column(nullable = false)
@@ -23,10 +21,19 @@ public class University {
     @Column(nullable = false)
     private String establishedYear;
 
+    @Column(nullable = false)
+    private String password;
+
+    @ManyToOne(fetch = FetchType.LAZY) // 사용자와의 관계 설정
+    @JoinColumn(name = "user_id") // 외래 키 설정
+    private User user;
+
     @Builder
-    public University(String universityName, String clubName, String establishedYear) {
+    public University(String universityName, String clubName, String establishedYear, String password, User user) {
         this.universityName = universityName;
         this.clubName = clubName;
         this.establishedYear = establishedYear;
+        this.password = password;
+        this.user = user; // 연관된 사용자 설정
     }
 }

@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/DocumentAutomation;
+    url: jdbc:h2:tcp://localhost/~/DocumentAutomation
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -12,8 +12,14 @@ spring:
         #          show_sql: true
         format_sql: true
 jwt:
-  secret: yourVeryLongAndSecureSecretKeyHerePleaseMakeItLongEnough
+  secret: ENC(pnblg3uyjOXNjmbShqjPOrDJkgxc57a0JMualct6qS6iOicZb9lFFanvbsepMBLqwebeA6lAZtKZXp1DrJ0ZtcdZcOZSvBvZ)
   expiration: 86400000  # 24시간 (밀리초 단위)
+
+#jasypt:
+#  encryptor:
+#    bean: jasyptEncryptor
+#    password: ${ENCRYPT_KEY}
+
 
 logging:
   level:
