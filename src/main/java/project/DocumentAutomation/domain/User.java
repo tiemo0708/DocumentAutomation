@@ -26,11 +26,16 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "university_id")
+    private University university;
+
     @Builder
-    public User(String username, String password, Role role) {
+    public User(String username, String password, Role role, University university) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.university = university;
     }
 
     public enum Role {

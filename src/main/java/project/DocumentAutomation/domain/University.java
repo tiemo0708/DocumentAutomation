@@ -18,15 +18,15 @@ public class University {
     private String universityName;
 
     @Column(nullable = false)
-    private String location;
+    private String clubName;
 
     @Column(nullable = false)
     private String establishedYear;
 
     @Builder
-    public University(String universityName, String location, String establishedYear) {
+    public University(String universityName, String clubName, String establishedYear) {
         this.universityName = universityName;
-        this.location = location;
+        this.clubName = clubName;
         this.establishedYear = establishedYear;
     }
 }
