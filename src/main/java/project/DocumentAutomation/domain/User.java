@@ -28,8 +28,8 @@ public class User {
     private Role role;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "university_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "university_id", unique = true) // 외래 키와 유니크 설정
     private University university;
 
     @Builder

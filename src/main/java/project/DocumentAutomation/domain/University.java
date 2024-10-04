@@ -24,8 +24,7 @@ public class University {
     @Column(nullable = false)
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY) // 사용자와의 관계 설정
-    @JoinColumn(name = "user_id") // 외래 키 설정
+    @OneToOne(mappedBy = "university", fetch = FetchType.LAZY) // User에서 university가 주인임을 명시
     private User user;
 
     @Builder
