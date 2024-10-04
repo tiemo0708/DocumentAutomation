@@ -26,7 +26,7 @@ public class AdminController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/createUniversity")
-    @Transactional // 트랜잭션을 사용하여 원자성 보장
+    @Transactional // 트랜잭션 추가
     public ResponseEntity<?> createUniversity(@RequestBody CreateUniversityDto createUniversityDto, Authentication authentication) {
         // 인증된 사용자 정보 가져오기 (Admin 사용자)
         String adminUsername = authentication.getName();
@@ -43,27 +43,30 @@ public class AdminController {
             return ResponseEntity.badRequest().body("University name already exists.");
         }
 
-        // 대학 계정을 위한 사용자 생성 (UNIVERSITY 역할 부여)
-        User universityUser = User.builder()
-                .username(createUniversityDto.getUsername())  // 새로운 대학 사용자 이름
-                .password(passwordEncoder.encode(createUniversityDto.getPassword()))  // 비밀번호 암호화
-                .role(User.Role.UNIVERSITY)  // 대학 사용자 역할 설정
-                .build();
-
-        // University 객체 생성 (새로 생성된 대학 사용자와 연관)
+        // 대학 객체 먼저 생성 및 저장
         University university = University.builder()
                 .universityName(createUniversityDto.getUniversityName())
                 .clubName(createUniversityDto.getClubName())
                 .establishedYear(createUniversityDto.getEstablishedYear())
-                .password(passwordEncoder.encode(createUniversityDto.getPassword()))  // 대학 비밀번호 암호화
-                .user(universityUser)  // 대학 사용자와 연관
+                .password(passwordEncoder.encode(createUniversityDto.getPassword())) // 비밀번호 암호화
                 .build();
 
-        // 대학 사용자 및 대학 정보 저장
-        userRepository.save(universityUser); // user 저장 시 university는 자동으로 저장됨 (연관 관계의 주인)
+        universityRepository.save(university); // 먼저 University 저장
+
+        // 대학 계정을 위한 사용자 생성
+        User universityUser = User.builder()
+                .username(createUniversityDto.getUsername()) // 새로운 대학 사용자 이름
+                .password(passwordEncoder.encode(createUniversityDto.getPassword())) // 비밀번호 암호화
+                .role(User.Role.UNIVERSITY) // 대학 사용자 역할 설정
+                .university(university) // University와 연관 설정
+                .build();
+
+        // 대학 사용자 저장
+        userRepository.save(universityUser);
 
         return ResponseEntity.ok("University created for user: " + universityUser.getUsername());
     }
+
 
     @GetMapping("/dashboard")
     public ResponseEntity<?> dashboard() {
