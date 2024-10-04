@@ -1,11 +1,11 @@
 package project.DocumentAutomation.controller;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.DocumentAutomation.Repository.UniversityRepository;
 import project.DocumentAutomation.Repository.UserRepository;
@@ -18,7 +18,6 @@ import project.DocumentAutomation.dto.CreateUniversityDto;
 @RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
-@Controller
 public class AdminController {
 
     private final UserService userService;
@@ -27,11 +26,22 @@ public class AdminController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/createUniversity")
+    @Transactional // 트랜잭션을 사용하여 원자성 보장
     public ResponseEntity<?> createUniversity(@RequestBody CreateUniversityDto createUniversityDto, Authentication authentication) {
         // 인증된 사용자 정보 가져오기 (Admin 사용자)
         String adminUsername = authentication.getName();
         User adminUser = userService.findByUsername(adminUsername)
                 .orElseThrow(() -> new IllegalArgumentException("Admin user not found"));
+
+        // 동일한 사용자 이름이 존재하는지 확인
+        if (userRepository.findByUsername(createUniversityDto.getUsername()).isPresent()) {
+            return ResponseEntity.badRequest().body("Username already exists.");
+        }
+
+        // 동일한 대학 이름이 존재하는지 확인
+        if (universityRepository.findByUniversityName(createUniversityDto.getUniversityName()).isPresent()) {
+            return ResponseEntity.badRequest().body("University name already exists.");
+        }
 
         // 대학 계정을 위한 사용자 생성 (UNIVERSITY 역할 부여)
         User universityUser = User.builder()
@@ -39,9 +49,6 @@ public class AdminController {
                 .password(passwordEncoder.encode(createUniversityDto.getPassword()))  // 비밀번호 암호화
                 .role(User.Role.UNIVERSITY)  // 대학 사용자 역할 설정
                 .build();
-
-        // 대학 사용자 저장
-        userRepository.save(universityUser);
 
         // University 객체 생성 (새로 생성된 대학 사용자와 연관)
         University university = University.builder()
@@ -52,17 +59,11 @@ public class AdminController {
                 .user(universityUser)  // 대학 사용자와 연관
                 .build();
 
-        // 대학 정보 저장
-        universityRepository.save(university);
-
-        // 연관된 User에 University 객체 설정 (대학 정보와 연관된 사용자)
-        universityUser.setUniversity(university);
-        userRepository.save(universityUser);  // 사용자 정보 업데이트
+        // 대학 사용자 및 대학 정보 저장
+        userRepository.save(universityUser); // user 저장 시 university는 자동으로 저장됨 (연관 관계의 주인)
 
         return ResponseEntity.ok("University created for user: " + universityUser.getUsername());
     }
-
-
 
     @GetMapping("/dashboard")
     public ResponseEntity<?> dashboard() {
