@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "universities")
 @Getter
@@ -26,6 +29,27 @@ public class University {
 
     @OneToOne(mappedBy = "university", fetch = FetchType.LAZY) // User에서 university가 주인임을 명시
     private User user;
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UniversityMember> universityMembers = new ArrayList<>();
+
+    public void addMember(String name, String birthDate, String phoneNumber, String email, String gender,
+                          String habitatId, Boolean waiverSubmitted, Boolean consentSubmitted) {
+        // 새로운 UniversityMember 객체 생성 시, university 필드를 직접 설정
+        UniversityMember universityMember = UniversityMember.builder()
+                .name(name)
+                .birthDate(birthDate)
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .gender(gender)
+                .habitatId(habitatId)
+                .waiverSubmitted(waiverSubmitted)
+                .consentSubmitted(consentSubmitted)
+                .university(this)  // university 필드를 직접 설정
+                .build();
+
+        this.universityMembers.add(universityMember);
+    }
 
     @Builder
     public University(String universityName, String clubName, String establishedYear, String password, User user) {
