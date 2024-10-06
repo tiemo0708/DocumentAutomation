@@ -1,4 +1,4 @@
-package project.DocumentAutomation.Service;
+package project.DocumentAutomation.service;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

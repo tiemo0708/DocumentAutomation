@@ -1,4 +1,4 @@
-package project.DocumentAutomation.Service;
+package project.DocumentAutomation.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import project.DocumentAutomation.Repository.UniversityRepository;
-import project.DocumentAutomation.Repository.UserRepository;
+import project.DocumentAutomation.repository.UniversityRepository;
+import project.DocumentAutomation.repository.UserRepository;
 import project.DocumentAutomation.domain.University;
 import project.DocumentAutomation.domain.User;
 import java.util.Collections;

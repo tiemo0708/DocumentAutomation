@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.DocumentAutomation.dto.AccessTokenResponse;
 import project.DocumentAutomation.dto.LoginDto;
 import project.DocumentAutomation.dto.TokenDto;
-import project.DocumentAutomation.Service.AuthService;
+import project.DocumentAutomation.service.AuthService;
 import java.time.Duration;
 
 @Slf4j

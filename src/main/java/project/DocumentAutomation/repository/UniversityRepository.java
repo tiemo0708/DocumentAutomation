@@ -1,4 +1,4 @@
-package project.DocumentAutomation.Repository;
+package project.DocumentAutomation.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import project.DocumentAutomation.domain.University;

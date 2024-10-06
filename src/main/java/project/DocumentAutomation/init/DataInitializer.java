@@ -3,7 +3,7 @@ package project.DocumentAutomation.init;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import project.DocumentAutomation.Service.UserService;
+import project.DocumentAutomation.service.UserService;
 import project.DocumentAutomation.domain.User;
 
 @Component
