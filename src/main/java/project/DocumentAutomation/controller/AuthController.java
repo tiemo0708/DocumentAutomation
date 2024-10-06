@@ -14,13 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import project.DocumentAutomation.dto.AccessTokenResponse;
 import project.DocumentAutomation.dto.LoginDto;
 import project.DocumentAutomation.dto.TokenDto;
 import project.DocumentAutomation.Service.AuthService;
-
-
 import java.time.Duration;
 
 @Slf4j

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +14,6 @@ import project.DocumentAutomation.Repository.UniversityRepository;
 import project.DocumentAutomation.Repository.UserRepository;
 import project.DocumentAutomation.domain.University;
 import project.DocumentAutomation.domain.User;
-
 import java.util.Collections;
 import java.util.Optional;
 
