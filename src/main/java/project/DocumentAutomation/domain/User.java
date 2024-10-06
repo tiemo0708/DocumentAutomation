@@ -2,6 +2,7 @@ package project.DocumentAutomation.domain;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class User {
     private Role role;
 
     @Setter
+    @JsonIgnore  // JSON 직렬화 시 무한 루프 방지
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "university_id", unique = true) // 외래 키와 유니크 설정
     private University university;

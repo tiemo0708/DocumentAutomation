@@ -14,6 +14,8 @@ import project.DocumentAutomation.domain.University;
 import project.DocumentAutomation.domain.User;
 import project.DocumentAutomation.dto.CreateUniversityDto;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ADMIN')")
@@ -67,6 +69,15 @@ public class AdminController {
         return ResponseEntity.ok("University created for user: " + universityUser.getUsername());
     }
 
+    // 대학 명단 조회 API
+    @GetMapping("/universities")
+    public ResponseEntity<List<University>> getAllUniversities() {
+        // 모든 대학 조회
+        List<University> universities = universityRepository.findAll();
+
+        // 대학 목록 반환
+        return ResponseEntity.ok(universities);
+    }
 
     @GetMapping("/dashboard")
     public ResponseEntity<?> dashboard() {
