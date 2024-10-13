@@ -16,6 +16,6 @@ public class UniversityMemberDto {
     private String email;
     private String gender;
     private String habitatId;
-    private Boolean waiverSubmitted;
-    private Boolean consentSubmitted;
+    private Boolean waiverSubmitted; //면책증명서 제출여부
+    private Boolean consentSubmitted; //개인정보 동의서 제출 여부
 }
