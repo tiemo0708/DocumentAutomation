@@ -21,6 +21,9 @@ public class VolunteerPlan {
     @JoinColumn(name = "university_id", nullable = false)
     private University university;
 
+    @OneToOne(mappedBy = "volunteerPlan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private VolunteerReport volunteerReport;  // 보고서와 일대일 관계 설정
+
     @Column(nullable = false)
     private String clubName;  // 동아리 이름
 

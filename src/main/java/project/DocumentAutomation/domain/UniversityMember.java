@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "university_members")
 @Getter
@@ -43,6 +45,9 @@ public class UniversityMember {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "university_id")
     private University university;
+
+    @OneToMany(mappedBy = "universityMember", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VolunteerParticipation> volunteerParticipations; // 참여한 봉사 활동 목록
 
     @Builder
     public UniversityMember(String name, String birthDate, String phoneNumber, String email, String gender,
